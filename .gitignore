@@ -1,13 +1,3 @@
-.DS_Store
-agent/.DS_Store
-agent/src/.DS_Store
-agent/src/main/.DS_Store
-agent/src/main/java/.DS_Store
-agent/target/maven-archiver/
-agent/target/maven-status/
-test/.DS_Store
-test/src/.DS_Store
-test/src/main/.DS_Store
-test/src/main/java/.DS_Store
-test/target/maven-archiver/
-test/target/maven-status/
+*.DS_Store
+agent/target/*
+test/target/*

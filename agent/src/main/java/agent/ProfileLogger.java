@@ -17,6 +17,7 @@ public class ProfileLogger {
 	private static final String ENS = "UTF8";
 
 	private static Map<Long,ProfileLogger> logMap = Collections.synchronizedMap(new HashMap<Long,ProfileLogger>());
+	private static PrintStream methodDecOut = null;
 
 	private PrintStream out;
 
@@ -60,7 +61,11 @@ public class ProfileLogger {
 
 			file = new File(fileName);
 			file.getParentFile().mkdirs();
-			this.out = new PrintStream(file, ENS); 
+			this.out = new PrintStream(file, ENS);
+
+			if (this.methodDecOut == null) {
+				this.methodDecOut = new PrintStream("out/methodDecOut.txt", ENS);
+			}
 
 		} catch (SecurityException e) {
 			System.err.println("SecurityException!");
@@ -99,6 +104,13 @@ public class ProfileLogger {
 	 */
 	public void logMethodDuration(String methodSig, long duration) {
 		this.out.println(getIndent() + methodSig + " : " + String.valueOf(duration));
+	}
+
+	/**
+	 * Logs the first line of code in a method
+	 */
+	public void logMethodDeclaration(String methodSig, int lineNumber) {
+		this.methodDecOut.println(methodSig + " : " + lineNumber);
 	}
 
 	/**

@@ -44,7 +44,7 @@ public class Agent {
 					/* filter by package */
 					for (String pack : args) {
 
-						if (!className.startsWith("java.") && className.startsWith(pack + ".")) {
+						if (!className.startsWith("java.") && !className.startsWith("agent.") && className.startsWith(pack + ".")) {
 
 							CtMethod[] methods = thisClass.getDeclaredMethods​();
 
@@ -56,7 +56,8 @@ public class Agent {
 
 								final String methodName = m.getLongName();
 
-								/* TODO - log method line numbers? */
+								/* log method line numbers */
+								ProfileLogger.getInstance().logMethodDeclaration(methodName, m.getMethodInfo().getLineNumber(0));
 
 								/* log calls to Thread.start() */
 								m.instrument(new ExprEditor() {
@@ -64,17 +65,25 @@ public class Agent {
 									@Override
 									public void edit(MethodCall m) {
 										try {
-											if (m.getMethod().getLongName().equals("java.lang.Thread.start()")) {
-												m.replace(
 
+											// print MethodCall
+											// System.out.println(m.getMethod().getLongName() + " : " + m.getFileName() + " : " + m.getLineNumber());
+
+											String callName = m.getMethod().getLongName();
+
+											if (callName.equals("java.lang.Thread.start()")) {
+
+												m.replace(
+													
 													// logThreadStart(Thread.getID())
 													"{ agent.ProfileLogger.getInstance().logThreadStart($0.getId());" + 
 
 													// original call
 													"$_ = $proceed($$);}"
-
 												);
+
 											}
+
 					 					} catch (Exception ex) {
 											ex.printStackTrace();
 										}
@@ -82,9 +91,7 @@ public class Agent {
 
 								});
 
-								/* log method duration */
-
-								// ProfileLoger logger
+								// ProfileLogger logger
 								m.addLocalVariable("logger", logClass);
 
 								// long elapsed time
