@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 
+import java.lang.StackTraceElement;
+
 public class ProfileLogger {
 
 	private static final String OUTFILE = "out/thread_";
@@ -17,7 +19,6 @@ public class ProfileLogger {
 	private static final String ENS = "UTF8";
 
 	private static Map<Long,ProfileLogger> logMap = Collections.synchronizedMap(new HashMap<Long,ProfileLogger>());
-	private static PrintStream methodDecOut = null;
 
 	private PrintStream out;
 
@@ -63,10 +64,6 @@ public class ProfileLogger {
 			file.getParentFile().mkdirs();
 			this.out = new PrintStream(file, ENS);
 
-			if (this.methodDecOut == null) {
-				this.methodDecOut = new PrintStream("out/methodDecOut.txt", ENS);
-			}
-
 		} catch (SecurityException e) {
 			System.err.println("SecurityException!");
 			System.exit(-1);
@@ -88,15 +85,16 @@ public class ProfileLogger {
 	 * for parsing simplicity.
 	 */
 	public void logThreadStart(long tid) {
-		this.out.println(getIndent() + "\tThread.start() : start");
-		this.out.println(getIndent() + "\tThread.start() : " + String.valueOf(tid));
+		String indent = getIndent();
+		this.out.println(indent + "\tThread.start() : (" + getCaller(3) + ")");
+		this.out.println(indent + "\tThread.start() : " + String.valueOf(tid));
 	}
 
 	/**
 	 * Logs the start of a method call.
 	 */
 	public void logMethodStart(String methodSig) {
-		this.out.println(getIndent() + methodSig + " : start");
+		this.out.println(getIndent() + methodSig + " : (" + getCaller(4) + ")");
 	}
 
 	/**
@@ -107,10 +105,19 @@ public class ProfileLogger {
 	}
 
 	/**
-	 * Logs the first line of code in a method
+	 * Get the caller File/linenum of a stack trace
 	 */
-	public void logMethodDeclaration(String methodSig, int lineNumber) {
-		this.methodDecOut.println(methodSig + " : " + lineNumber);
+	public static String getCaller(int index) {
+
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+
+		if (trace.length > index) {
+			StackTraceElement e = trace[index];
+			return e.getFileName() + " : " + e.getLineNumber();
+		} else {
+			// main method
+			return "null : 0";
+		}
 	}
 
 	/**

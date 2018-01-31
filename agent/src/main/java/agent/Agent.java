@@ -56,8 +56,6 @@ public class Agent {
 
 								final String methodName = m.getLongName();
 
-								/* log method line numbers */
-								ProfileLogger.getInstance().logMethodDeclaration(methodName, m.getMethodInfo().getLineNumber(0));
 
 								/* log calls to Thread.start() */
 								m.instrument(new ExprEditor() {
@@ -65,16 +63,13 @@ public class Agent {
 									@Override
 									public void edit(MethodCall m) {
 										try {
-
-											// print MethodCall
-											// System.out.println(m.getMethod().getLongName() + " : " + m.getFileName() + " : " + m.getLineNumber());
-
+											
 											String callName = m.getMethod().getLongName();
 
 											if (callName.equals("java.lang.Thread.start()")) {
 
 												m.replace(
-													
+
 													// logThreadStart(Thread.getID())
 													"{ agent.ProfileLogger.getInstance().logThreadStart($0.getId());" + 
 

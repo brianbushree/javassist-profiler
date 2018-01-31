@@ -1,4 +1,4 @@
-test.ArrayOperations$1.run() : start
-	Thread.start() : start
-	Thread.start() : 11
-test.ArrayOperations$1.run() : 698145
+test.ArrayOperations$1.run() : (null : 0)
+	Thread.start() : (ArrayOperations.java : 34)
+	Thread.start() : 10
+test.ArrayOperations$1.run() : 326066
