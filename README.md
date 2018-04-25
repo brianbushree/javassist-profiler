@@ -3,7 +3,7 @@ Profiler for Java projects that tracks method duration and the creation of new T
 
 Usage:
 ```
-java -javaagent:<AGENTJAR_PATH>=<PACKAGE1>[,<PACKAGE2>, ... ] -jar <PROGRAM_JAR>
+java -javaagent:<AGENTJAR_PATH>=<OUT_DIR><PACKAGE1>[,<PACKAGE2>, ... ] -jar <PROGRAM_JAR>
 ```
 
 **For example:**

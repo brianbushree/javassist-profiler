@@ -13,7 +13,8 @@ import java.lang.StackTraceElement;
 
 public class ProfileLogger {
 
-	private static final String OUTFILE = "out/thread_";
+	public static String APP_DIR;
+	private static final String OUTFILE = "/out/thread_";
 	private static final String OUTFILE_EXT = ".txt";
 
 	private static final String ENS = "UTF8";
@@ -54,7 +55,7 @@ public class ProfileLogger {
 	 */
 	private ProfileLogger(long tid) {
 
-		String fileName = OUTFILE + String.valueOf(tid) + OUTFILE_EXT;
+		String fileName = APP_DIR + OUTFILE + String.valueOf(tid) + OUTFILE_EXT;
 
 		File file;
 

@@ -12,6 +12,8 @@ import javassist.CtMethod;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 
+import java.lang.reflect.Field;
+
 public class Agent {
 
 	/**
@@ -26,7 +28,19 @@ public class Agent {
 	 */
 	public static void premain(String agentArgs, Instrumentation inst) {
 
-		final String args[] = agentArgs.split(",");
+		String temp[] = agentArgs.split("###");
+		final String appDir = temp[0];
+		final String args[] = temp[1].split(",");
+
+		/* Set ProfileLogger.APP_DIR or Fail */
+		try {
+			Field field = ProfileLogger.class.getDeclaredField("APP_DIR");
+			field.set(null, appDir);
+		} catch (Exception e) {
+			System.err.println(e);
+			System.err.println("No such field...");
+			System.exit(-1);
+		}
 
 		inst.addTransformer(new ClassFileTransformer() {
 

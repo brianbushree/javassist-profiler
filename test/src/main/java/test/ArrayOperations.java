@@ -58,7 +58,7 @@ public class ArrayOperations {
 		int function;
 
 		// fake input
-		int input = 1;
+		// int input = 1;
 
 		// make random array
 		int[] array = makeRandomArray(arraySize,min,max);		
@@ -69,8 +69,8 @@ public class ArrayOperations {
 		// start interface loop
 		do {
 			System.out.print("\n\nPlease choose from the following list of options:\n\n1. Print the maximum number in the array.\n2. Print the minimum number in the array.\n3. Print the sum of the array\n4. Print the average of the array\n5. Reverse the array.\n6. Print the occurences for each number in the array.\n7. Exit the Program.\n\nEnter a number: ");
-			// function = GetInput.getInt(7);
-			function = input++;
+			function = GetInput.getInt(7);
+			// function = input++;
 
 			switch(function) {
 				case 1:
@@ -102,7 +102,7 @@ public class ArrayOperations {
 					break;
 			}
 
-		} while(function != 7 && input < 8);
+		} while(function != 7); // && input < 8
 
 	}
 
